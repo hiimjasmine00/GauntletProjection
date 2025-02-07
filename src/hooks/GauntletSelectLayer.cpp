@@ -1,8 +1,11 @@
-#include "GPGauntletsPopup.hpp"
+#include "../classes/GPGauntletsPopup.hpp"
+#include <Geode/binding/BoomScrollLayer.hpp>
+#include <Geode/binding/GameLevelManager.hpp>
+#include <Geode/binding/GJMapPack.hpp>
+#include <Geode/modify/GauntletSelectLayer.hpp>
 
 using namespace geode::prelude;
 
-#include <Geode/modify/GauntletSelectLayer.hpp>
 class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
     struct Fields {
         CCMenu* m_timeMenu;

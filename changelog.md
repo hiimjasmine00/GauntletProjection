@@ -1,4 +1,9 @@
 # Gauntlet Projection Changelog
+## v1.0.4 (2025-02-07)
+- Added node IDs to the projection popup
+- Fixed the projection popup size
+- Updated the gallery to include the new gauntlets
+
 ## v1.0.3 (2024-11-15)
 - Ported to Geode v4.0.0-beta.1
 

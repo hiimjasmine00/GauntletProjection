@@ -1,6 +1,4 @@
-#define NUM_GAUNTLETS 54
-
-typedef std::function<void()> const& GauntletCallback;
+#include <Geode/ui/Layout.hpp>
 
 class TableNode : public cocos2d::CCNode {
 protected:
@@ -10,6 +8,7 @@ protected:
     int m_columns;
     int m_rows;
     float m_rowHeight;
+    std::string m_rowPrefix;
 
     bool init(int columns, int rows);
 public:
@@ -18,17 +17,9 @@ public:
     void setColumnLayout(geode::AxisLayout*);
     void setRowLayout(geode::AxisLayout*);
     void setRowHeight(float);
+    void setRowPrefix(const std::string&);
     void updateAllLayouts();
-    void addButton(CCMenuItemSpriteExtra*);
+    void addButton(cocos2d::CCMenuItem*);
 
     ~TableNode() override;
-};
-
-class GPGauntletsPopup : public geode::Popup<GauntletCallback> {
-protected:
-    std::vector<bool> m_enabledGauntlets;
-
-    bool setup(GauntletCallback) override;
-public:
-    static GPGauntletsPopup* create(GauntletCallback);
 };

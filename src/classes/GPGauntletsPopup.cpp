@@ -1,71 +1,11 @@
 #include "GPGauntletsPopup.hpp"
+#include "TableNode.hpp"
+#include <Geode/binding/ButtonSprite.hpp>
+#include <Geode/binding/GameLevelManager.hpp>
+#include <Geode/binding/GauntletSprite.hpp>
+#include <Geode/loader/Mod.hpp>
 
 using namespace geode::prelude;
-
-TableNode* TableNode::create(int columns, int rows) {
-    auto ret = new TableNode();
-    if (ret->init(columns, rows)) {
-        ret->autorelease();
-        return ret;
-    }
-    delete ret;
-    return nullptr;
-}
-
-bool TableNode::init(int columns, int rows) {
-    if (!CCNode::init()) return false;
-
-    setAnchorPoint({ 0.5f, 0.5f });
-    m_menus = CCArray::create();
-    m_menus->retain();
-    m_columns = columns;
-    m_rows = rows;
-
-    return true;
-}
-
-void TableNode::setColumnLayout(AxisLayout* columnLayout) {
-    m_columnLayout = columnLayout;
-    setLayout(m_columnLayout);
-}
-
-void TableNode::setRowLayout(AxisLayout* rowLayout) {
-    m_rowLayout = rowLayout;
-    for (auto menu : CCArrayExt<CCMenu*>(m_menus)) {
-        menu->setLayout(m_rowLayout);
-    }
-}
-
-void TableNode::setRowHeight(float rowHeight) {
-    m_rowHeight = rowHeight;
-    for (auto menu : CCArrayExt<CCMenu*>(m_menus)) {
-        menu->setContentSize({ m_obContentSize.width, rowHeight });
-    }
-}
-
-void TableNode::updateAllLayouts() {
-    for (auto menu : CCArrayExt<CCMenu*>(m_menus)) {
-        menu->updateLayout();
-    }
-    updateLayout();
-}
-
-void TableNode::addButton(CCMenuItemSpriteExtra* button) {
-    CCMenu* menu = nullptr;
-    if (m_menus->count() <= 0 || static_cast<CCMenu*>(m_menus->objectAtIndex(m_menus->count() - 1))->getChildrenCount() >= m_columns) {
-        menu = CCMenu::create();
-        menu->setContentSize({ m_obContentSize.width, m_rowHeight });
-        menu->setLayout(m_rowLayout);
-        addChild(menu);
-        m_menus->addObject(menu);
-    } else menu = static_cast<CCMenu*>(m_menus->objectAtIndex(m_menus->count() - 1));
-
-    menu->addChild(button);
-}
-
-TableNode::~TableNode() {
-    CC_SAFE_RELEASE(m_menus);
-}
 
 GPGauntletsPopup* GPGauntletsPopup::create(GauntletCallback callback) {
     auto ret = new GPGauntletsPopup();
@@ -78,18 +18,31 @@ GPGauntletsPopup* GPGauntletsPopup::create(GauntletCallback callback) {
 }
 
 bool GPGauntletsPopup::setup(GauntletCallback callback) {
+    setID("GPGauntletsPopup");
     setTitle("Project Gauntlets");
+    m_title->setID("project-gauntlets-title");
+    m_mainLayer->setID("main-layer");
+    m_buttonMenu->setID("button-menu");
+    m_bgSprite->setID("background");
+    m_closeBtn->setID("close-button");
 
     m_enabledGauntlets = Mod::get()->getSavedValue("projected-ids", std::vector<bool>(NUM_GAUNTLETS, false));
     m_enabledGauntlets.resize(NUM_GAUNTLETS, false);
 
     auto savedGauntlets = GameLevelManager::get()->m_savedGauntlets;
-    auto table = TableNode::create(6, (NUM_GAUNTLETS + 5 - savedGauntlets->count()) / 6);
+    auto rows = (NUM_GAUNTLETS + 5 - savedGauntlets->count()) / 6;
+    m_size = CCSize { 350.0f, 150.0f + rows * 30.0f };
+    m_mainLayer->setContentSize(m_size);
+    m_mainLayer->updateLayout();
+
+    auto table = TableNode::create(6, rows);
     table->setColumnLayout(ColumnLayout::create()->setGap(7.5f)->setAxisReverse(true));
     table->setRowLayout(RowLayout::create()->setAxisAlignment(AxisAlignment::Even));
     table->setRowHeight(60.0f);
-    table->setContentSize({ 350.0f, 190.0f });
-    table->setPosition({ 175.0f, 140.0f });
+    table->setRowPrefix("gauntlet-button-row");
+    table->setContentSize({ 350.0f, rows * 70.0f });
+    table->setPosition({ 175.0f, 80.0f + rows * 15.0f });
+    table->setID("gauntlet-buttons");
     m_mainLayer->addChild(table);
 
     for (int i = 0; i < NUM_GAUNTLETS; i++) {
@@ -103,6 +56,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
             m_enabledGauntlets[i] = !m_enabledGauntlets[i];
             innerSprite->setColor(m_enabledGauntlets[i] ? ccColor3B { 255, 255, 255 } : ccColor3B { 125, 125, 125 });
         });
+        gauntletButton->setID(fmt::format("gauntlet-button-{}", i + 1));
         table->addButton(gauntletButton);
     }
 
@@ -114,6 +68,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
         onClose(nullptr);
     });
     confirmButton->setPosition({ 175.0f, 25.0f });
+    confirmButton->setID("confirm-button");
     m_buttonMenu->addChild(confirmButton);
 
     return true;
