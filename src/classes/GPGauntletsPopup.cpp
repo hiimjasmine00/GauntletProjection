@@ -26,7 +26,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
     m_bgSprite->setID("background");
     m_closeBtn->setID("close-button");
 
-    m_enabledGauntlets = Mod::get()->getSavedValue("projected-ids", std::vector<bool>(NUM_GAUNTLETS, false));
+    m_enabledGauntlets = Mod::get()->getSavedValue<std::vector<bool>>("projected-ids", {});
     m_enabledGauntlets.resize(NUM_GAUNTLETS, false);
 
     auto savedGauntlets = GameLevelManager::get()->m_savedGauntlets;

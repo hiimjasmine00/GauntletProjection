@@ -8,26 +8,21 @@ using namespace geode::prelude;
 
 class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
     struct Fields {
-        CCMenu* m_timeMenu;
+        CCMenuItemSpriteExtra* m_timeButton;
     };
 
-    bool init(int idk) {
-        if (!GauntletSelectLayer::init(idk)) return false;
+    bool init(int p0) {
+        if (!GauntletSelectLayer::init(p0)) return false;
 
-        auto winSize = CCDirector::get()->getWinSize();
         auto f = m_fields.self();
-        f->m_timeMenu = CCMenu::create();
-        f->m_timeMenu->setPosition({ winSize.width - 30.0f, winSize.height - 30.0f });
-        f->m_timeMenu->setID("time-menu"_spr);
-        f->m_timeMenu->setVisible(GameLevelManager::get()->m_savedGauntlets->count() > 0);
-        addChild(f->m_timeMenu, 2);
-
-        auto timeButton = CCMenuItemSpriteExtra::create(
+        f->m_timeButton = CCMenuItemSpriteExtra::create(
             CCSprite::createWithSpriteFrameName("GJ_timeIcon_001.png"),
             this, menu_selector(GPGauntletSelectLayer::onProject)
         );
-        timeButton->setID("time-button"_spr);
-        f->m_timeMenu->addChild(timeButton);
+        f->m_timeButton->setID("time-button"_spr);
+        auto topRightMenu = getChildByID("top-right-menu");
+        topRightMenu->addChild(f->m_timeButton);
+        topRightMenu->updateLayout();
 
         return true;
     }
@@ -50,7 +45,7 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
 
     void setupGauntlets() {
         auto glm = GameLevelManager::get();
-        auto projectedIDs = Mod::get()->getSavedValue("projected-ids", std::vector<bool>(NUM_GAUNTLETS, false));
+        auto projectedIDs = Mod::get()->getSavedValue<std::vector<bool>>("projected-ids", {});
         projectedIDs.resize(NUM_GAUNTLETS, false);
         auto newSavedGauntlets = CCDictionary::create();
         newSavedGauntlets->retain();
@@ -79,7 +74,7 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
         }
 
         auto f = m_fields.self();
-        if (f->m_timeMenu) f->m_timeMenu->setVisible(glm->m_savedGauntlets->count() > 0);
+        if (f->m_timeButton) f->m_timeButton->setVisible(glm->m_savedGauntlets->count() > 0);
     }
 
     void onPlay(CCObject* sender) {

@@ -1,4 +1,7 @@
 # Gauntlet Projection Changelog
+## v1.0.5 (2025-02-22)
+- Fixed incompatibility with the mod "Gauntlet Level Vault" by Jacob375
+
 ## v1.0.4 (2025-02-07)
 - Added node IDs to the projection popup
 - Fixed the projection popup size
