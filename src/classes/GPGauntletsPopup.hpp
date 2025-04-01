@@ -2,7 +2,7 @@
 
 #define NUM_GAUNTLETS 54
 
-typedef const std::function<void()>& GauntletCallback;
+typedef std::function<void()> GauntletCallback;
 
 class GPGauntletsPopup : public geode::Popup<GauntletCallback> {
 protected:

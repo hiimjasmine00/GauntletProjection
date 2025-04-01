@@ -9,7 +9,7 @@ using namespace geode::prelude;
 
 GPGauntletsPopup* GPGauntletsPopup::create(GauntletCallback callback) {
     auto ret = new GPGauntletsPopup();
-    if (ret->initAnchored(350.0f, 270.0f, callback)) {
+    if (ret->initAnchored(350.0f, 270.0f, std::move(callback))) {
         ret->autorelease();
         return ret;
     }
@@ -62,11 +62,12 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
 
     table->updateAllLayouts();
 
-    auto confirmButton = CCMenuItemExt::createSpriteExtra(ButtonSprite::create("Confirm", "goldFont.fnt", "GJ_button_01.png", 0.8f), [this, callback](auto) {
-        Mod::get()->setSavedValue("projected-ids", m_enabledGauntlets);
-        callback();
-        onClose(nullptr);
-    });
+    auto confirmButton = CCMenuItemExt::createSpriteExtra(ButtonSprite::create("Confirm", "goldFont.fnt", "GJ_button_01.png", 0.8f),
+        [this, callback = std::move(callback)](auto) {
+            Mod::get()->setSavedValue("projected-ids", m_enabledGauntlets);
+            callback();
+            onClose(nullptr);
+        });
     confirmButton->setPosition({ 175.0f, 25.0f });
     confirmButton->setID("confirm-button");
     m_buttonMenu->addChild(confirmButton);

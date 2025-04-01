@@ -1,11 +1,11 @@
 {
-    "geode": "4.2.0",
+    "geode": "4.3.1",
     "gd": {
         "android": "2.2074",
         "win": "2.2074",
         "mac": "2.2074"
     },
-    "version": "v1.0.5",
+    "version": "v1.0.6",
     "id": "hiimjustin000.gauntlet_projection",
     "name": "Gauntlet Projection",
     "developer": "hiimjasmine00",
@@ -21,7 +21,7 @@
     "links": {
         "community": "https://discord.gg/QVKmbvBXA7",
         "source": "https://github.com/hiimjasmine00/GauntletProjection",
-        "homepage": "https://www.hiimjustin000.com"
+        "homepage": "https://www.hiimjasmine00.com"
     },
     "tags": [
         "enhancement",

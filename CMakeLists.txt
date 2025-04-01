@@ -5,7 +5,7 @@ set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(GEODE_DISABLE_PRECOMPILED_HEADERS ON)
 
-project(GauntletProjection VERSION 1.0.5)
+project(GauntletProjection VERSION 1.0.6)
 
 add_library(${PROJECT_NAME} SHARED
     src/classes/GPGauntletsPopup.cpp

@@ -9,6 +9,9 @@ using namespace geode::prelude;
 class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
     struct Fields {
         CCMenuItemSpriteExtra* m_timeButton;
+        ~Fields() {
+            CC_SAFE_RELEASE(m_timeButton);
+        }
     };
 
     bool init(int p0) {
@@ -20,6 +23,7 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
             this, menu_selector(GPGauntletSelectLayer::onProject)
         );
         f->m_timeButton->setID("time-button"_spr);
+        f->m_timeButton->retain();
         auto topRightMenu = getChildByID("top-right-menu");
         topRightMenu->addChild(f->m_timeButton);
         topRightMenu->updateLayout();
@@ -44,6 +48,9 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
     }
 
     void setupGauntlets() {
+        auto f = m_fields.self();
+        if (f->m_timeButton) f->m_timeButton->removeFromParentAndCleanup(false);
+
         auto glm = GameLevelManager::get();
         auto projectedIDs = Mod::get()->getSavedValue<std::vector<bool>>("projected-ids", {});
         projectedIDs.resize(NUM_GAUNTLETS, false);
@@ -72,9 +79,13 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
         for (int i = 0; i < NUM_GAUNTLETS; i++) {
             if (gauntletsAdded[i]) glm->m_savedGauntlets->removeObjectForKey(std::to_string(i + 1));
         }
-
-        auto f = m_fields.self();
-        if (f->m_timeButton) f->m_timeButton->setVisible(glm->m_savedGauntlets->count() > 0);
+        
+        if (glm->m_savedGauntlets->count() > 0) {
+            if (auto topRightMenu = getChildByID("top-right-menu"); topRightMenu && f->m_timeButton) {
+                topRightMenu->addChild(f->m_timeButton);
+                topRightMenu->updateLayout();
+            }
+        }
     }
 
     void onPlay(CCObject* sender) {

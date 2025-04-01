@@ -1,4 +1,7 @@
 # Gauntlet Projection Changelog
+## v1.0.6 (2025-04-01)
+- Internal code changes (April Fools' Day)
+
 ## v1.0.5 (2025-02-22)
 - Fixed incompatibility with the mod "Gauntlet Level Vault" by Jacob375
 
