@@ -1,4 +1,7 @@
 # Gauntlet Projection Changelog
+## v1.0.7 (2025-04-08)
+- Added support for iOS
+
 ## v1.0.6 (2025-04-01)
 - Internal code changes (April Fools' Day)
 
