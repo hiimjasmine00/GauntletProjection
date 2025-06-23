@@ -1,4 +1,7 @@
 # Gauntlet Projection Changelog
+## v1.0.8 (2025-06-23)
+- Ported to Geode v4.6.1
+
 ## v1.0.7 (2025-04-08)
 - Added support for iOS
 

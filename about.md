@@ -1,5 +1,5 @@
 # Gauntlet Projection
-A mod that shows the placement of future gauntlets.
+Show gauntlets before they're created.
 
 ## Features
 - A button in the top right corner of the gauntlet selection screen, which opens a popup for selecting which gauntlets to project

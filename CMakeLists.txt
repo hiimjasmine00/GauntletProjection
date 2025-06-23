@@ -9,7 +9,7 @@ endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(GEODE_DISABLE_PRECOMPILED_HEADERS ON)
 
-project(GauntletProjection VERSION 1.0.7)
+project(GauntletProjection VERSION 1.0.8)
 
 add_library(${PROJECT_NAME} SHARED
     src/classes/GPGauntletsPopup.cpp

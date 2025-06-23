@@ -1,16 +1,16 @@
 {
-    "geode": "4.3.1",
+    "geode": "4.6.1",
     "gd": {
         "android": "2.2074",
         "win": "2.2074",
         "mac": "2.2074",
         "ios": "2.2074"
     },
-    "version": "v1.0.7",
+    "version": "v1.0.8",
     "id": "hiimjustin000.gauntlet_projection",
     "name": "Gauntlet Projection",
     "developer": "hiimjasmine00",
-    "description": "A mod that shows placement of future gauntlets.",
+    "description": "Show gauntlets before they're created.",
     "resources": {
         "sprites": [
             "resources/*.png"
