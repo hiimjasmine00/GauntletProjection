@@ -1,4 +1,8 @@
 # Gauntlet Projection Changelog
+## v1.0.9 (2025-10-12)
+- Added a "Toggle All" button to enable or disable all gauntlets at once
+- Changed the projection popup background from brown to gray
+
 ## v1.0.8 (2025-06-23)
 - Ported to Geode v4.6.1
 

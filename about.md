@@ -6,3 +6,6 @@ Show gauntlets before they're created.
 
 ## Gallery
 ![Projection Popup](hiimjustin000.gauntlet_projection/projection-popup.png?width=300)
+
+## License
+This mod is licensed under the [MIT License](https://github.com/hiimjasmine00/GauntletProjection/blob/master/LICENSE).
