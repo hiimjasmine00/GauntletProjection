@@ -1,7 +1,7 @@
-#include <vector>
+#include <array>
 
 class GauntletProjection {
 public:
     constexpr static int gauntlets = 54;
-    static std::vector<bool> projectedIDs;
+    static std::array<bool, gauntlets> projectedIDs;
 };

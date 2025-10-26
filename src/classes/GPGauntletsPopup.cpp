@@ -1,6 +1,5 @@
 #include "GPGauntletsPopup.hpp"
 #include "TableNode.hpp"
-#include "../GauntletProjection.hpp"
 #include <algorithm>
 #include <Geode/binding/ButtonSprite.hpp>
 #include <Geode/binding/GameLevelManager.hpp>

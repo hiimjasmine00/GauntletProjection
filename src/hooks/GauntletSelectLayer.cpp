@@ -1,4 +1,3 @@
-#include "../GauntletProjection.hpp"
 #include "../classes/GPGauntletsPopup.hpp"
 #include <Geode/binding/BoomScrollLayer.hpp>
 #include <Geode/binding/GameLevelManager.hpp>
