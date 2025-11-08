@@ -53,16 +53,16 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
         auto newSavedGauntlets = CCDictionary::create();
 
         for (int i = 0; i < GauntletProjection::gauntlets; i++) {
-            auto id = fmt::to_string(i + 1);
-            auto gauntlet = static_cast<GJMapPack*>(savedGauntlets->objectForKey(id));
+            auto id = i + 1;
+            auto gauntlet = glm->getSavedGauntlet(id);
             if (!gauntlet && GauntletProjection::projectedIDs[i]) {
                 gauntlet = GJMapPack::create();
-                gauntlet->m_packID = i + 1;
+                gauntlet->m_packID = id;
                 gauntlet->m_levels = CCArray::create();
                 gauntlet->m_levels->retain();
                 gauntlet->m_isGauntlet = true;
             }
-            if (gauntlet) newSavedGauntlets->setObject(gauntlet, id);
+            if (gauntlet) newSavedGauntlets->setObject(gauntlet, fmt::to_string(id));
         }
 
         glm->m_savedGauntlets = newSavedGauntlets;
@@ -78,8 +78,6 @@ class $modify(GPGauntletSelectLayer, GauntletSelectLayer) {
     }
 
     void onPlay(CCObject* sender) {
-        if (GameLevelManager::get()->m_savedGauntlets->objectForKey(fmt::to_string(sender->getTag()))) {
-            GauntletSelectLayer::onPlay(sender);
-        }
+        if (GameLevelManager::get()->getSavedGauntlet(sender->getTag())) GauntletSelectLayer::onPlay(sender);
     }
 };

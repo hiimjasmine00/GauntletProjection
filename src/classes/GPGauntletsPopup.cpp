@@ -1,12 +1,13 @@
 #include "GPGauntletsPopup.hpp"
-#include "TableNode.hpp"
 #include <algorithm>
 #include <Geode/binding/ButtonSprite.hpp>
 #include <Geode/binding/GameLevelManager.hpp>
 #include <Geode/binding/GauntletSprite.hpp>
 #include <Geode/binding/GJMapPack.hpp>
+#include <jasmine/nodes.hpp>
 
 using namespace geode::prelude;
+using namespace jasmine::nodes;
 
 GPGauntletsPopup* GPGauntletsPopup::create(GauntletCallback callback) {
     auto ret = new GPGauntletsPopup();
@@ -29,19 +30,15 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
 
     m_enabledGauntlets = GauntletProjection::projectedIDs;
 
-    auto savedGauntlets = GameLevelManager::get()->m_savedGauntlets;
-    auto rows = (GauntletProjection::gauntlets + 5 - savedGauntlets->count()) / 6;
+    auto glm = GameLevelManager::get();
+    auto rows = (GauntletProjection::gauntlets + 5 - glm->m_savedGauntlets->count()) / 6;
     m_size.width = 350.0f;
     m_size.height = 150.0f + rows * 30.0f;
     m_mainLayer->setContentSize(m_size);
     m_mainLayer->updateLayout();
 
-    auto table = TableNode::create(6, rows);
-    table->setColumnLayout(ColumnLayout::create()->setGap(7.5f)->setAxisReverse(true));
-    table->setRowLayout(RowLayout::create()->setAxisAlignment(AxisAlignment::Even));
-    table->setRowHeight(60.0f);
-    table->setRowPrefix("gauntlet-button-row");
-    table->setContentSize({ 350.0f, rows * 70.0f });
+    auto table = TableNode::create(6, rows, 350.0f, rows * 70.0f, "gauntlet-button-row");
+    static_cast<AxisLayout*>(table->getLayout())->setGap(15.0f);
     table->setPosition({ 175.0f, 80.0f + rows * 15.0f });
     table->setID("gauntlet-buttons");
     m_mainLayer->addChild(table);
@@ -50,7 +47,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
 
     for (int i = 0; i < GauntletProjection::gauntlets; i++) {
         auto index = i + 1;
-        if (savedGauntlets->objectForKey(fmt::to_string(index))) {
+        if (glm->getSavedGauntlet(index)) {
             m_enabledGauntlets[i] = true;
             continue;
         }
@@ -64,9 +61,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
         auto gauntletButton = CCMenuItemExt::createSpriteExtra(gauntletSprite, [this, i, innerSprite](auto) {
             m_enabledGauntlets[i] = !m_enabledGauntlets[i];
             innerSprite->setColor(m_enabledGauntlets[i] ? ccColor3B { 255, 255, 255 } : ccColor3B { 125, 125, 125 });
-            m_toggleAllButton->toggle(std::ranges::all_of(m_enabledGauntlets, [](bool v) {
-                return v;
-            }));
+            m_toggleAllButton->toggle(std::ranges::all_of(m_enabledGauntlets, std::identity()));
         });
         gauntletButton->setID(fmt::format("gauntlet-button-{}", index));
         table->addButton(gauntletButton);
@@ -82,9 +77,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
         }
     });
     m_toggleAllButton->setPosition({ 25.0f, 25.0f });
-    m_toggleAllButton->toggle(std::ranges::all_of(m_enabledGauntlets, [](bool v) {
-        return v;
-    }));
+    m_toggleAllButton->toggle(std::ranges::all_of(m_enabledGauntlets, std::identity()));
     m_toggleAllButton->setID("toggle-all-button");
     m_buttonMenu->addChild(m_toggleAllButton);
 
