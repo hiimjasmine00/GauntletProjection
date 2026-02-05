@@ -11,7 +11,7 @@ using namespace jasmine::nodes;
 
 GPGauntletsPopup* GPGauntletsPopup::create(GauntletCallback callback) {
     auto ret = new GPGauntletsPopup();
-    if (ret->initAnchored(350.0f, 270.0f, std::move(callback), "GJ_square05.png")) {
+    if (ret->init(std::move(callback))) {
         ret->autorelease();
         return ret;
     }
@@ -19,7 +19,9 @@ GPGauntletsPopup* GPGauntletsPopup::create(GauntletCallback callback) {
     return nullptr;
 }
 
-bool GPGauntletsPopup::setup(GauntletCallback callback) {
+bool GPGauntletsPopup::init(GauntletCallback callback) {
+    if (!Popup::init(350.0f, 270.0f, "GJ_square05.png")) return false;
+
     setID("GPGauntletsPopup");
     setTitle("Project Gauntlets");
     m_title->setID("project-gauntlets-title");
@@ -43,8 +45,6 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
     table->setID("gauntlet-buttons");
     m_mainLayer->addChild(table);
 
-    m_gauntletSprites = CCDictionary::create();
-
     for (int i = 0; i < GauntletProjection::gauntlets; i++) {
         auto index = i + 1;
         if (glm->getSavedGauntlet(index)) {
@@ -56,7 +56,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
         gauntletSprite->setScale(0.7f);
         auto innerSprite = gauntletSprite->getChildByType<CCSprite>(0);
         innerSprite->setColor(m_enabledGauntlets[i] ? ccColor3B { 255, 255, 255 } : ccColor3B { 125, 125, 125 });
-        m_gauntletSprites->setObject(innerSprite, i);
+        m_gauntletSprites.emplace(i, innerSprite);
 
         auto gauntletButton = CCMenuItemExt::createSpriteExtra(gauntletSprite, [this, i, innerSprite](auto) {
             m_enabledGauntlets[i] = !m_enabledGauntlets[i];
@@ -71,7 +71,7 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
 
     m_toggleAllButton = CCMenuItemExt::createTogglerWithStandardSprites(0.8f, [this](CCMenuItemToggler* sender) {
         auto toggled = !sender->m_toggled;
-        for (auto [i, sprite] : CCDictionaryExt<intptr_t, CCNodeRGBA*>(m_gauntletSprites)) {
+        for (auto& [i, sprite] : m_gauntletSprites) {
             m_enabledGauntlets[i] = toggled;
             sprite->setColor(toggled ? ccColor3B { 255, 255, 255 } : ccColor3B { 125, 125, 125 });
         }
@@ -87,7 +87,9 @@ bool GPGauntletsPopup::setup(GauntletCallback callback) {
     toggleAllLabel->setID("toggle-all-label");
     m_mainLayer->addChild(toggleAllLabel);
 
-    auto confirmButton = CCMenuItemExt::createSpriteExtra(ButtonSprite::create("Confirm", 0.8f), [this, callback = std::move(callback)](auto) {
+    auto confirmButton = CCMenuItemExt::createSpriteExtra(ButtonSprite::create("Confirm", 0.8f), [
+        this, callback = std::move(callback)
+    ](auto) mutable {
         GauntletProjection::projectedIDs = m_enabledGauntlets;
         callback();
         onClose(nullptr);

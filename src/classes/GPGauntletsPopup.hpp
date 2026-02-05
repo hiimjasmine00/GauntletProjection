@@ -1,15 +1,15 @@
 #include "../GauntletProjection.hpp"
 #include <Geode/ui/Popup.hpp>
 
-typedef std::function<void()> GauntletCallback;
+typedef geode::Function<void()> GauntletCallback;
 
-class GPGauntletsPopup : public geode::Popup<GauntletCallback> {
+class GPGauntletsPopup : public geode::Popup {
 protected:
     std::array<bool, GauntletProjection::gauntlets> m_enabledGauntlets;
-    geode::Ref<cocos2d::CCDictionary> m_gauntletSprites;
+    std::unordered_map<int, cocos2d::CCSprite*> m_gauntletSprites;
     CCMenuItemToggler* m_toggleAllButton;
 
-    bool setup(GauntletCallback) override;
+    bool init(GauntletCallback);
 public:
     static GPGauntletsPopup* create(GauntletCallback);
 };

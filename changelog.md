@@ -1,4 +1,7 @@
 # Gauntlet Projection Changelog
+## v1.0.10 (2026-02-05)
+- Ported to Geometry Dash v2.208 / Geode SDK v5.0.0
+
 ## v1.0.9 (2025-10-12)
 - Added a "Toggle All" button to enable or disable all gauntlets at once
 - Changed the projection popup background from brown to gray
