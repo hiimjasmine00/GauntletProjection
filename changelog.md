@@ -1,5 +1,5 @@
 # Gauntlet Projection Changelog
-## v1.0.10 (2026-02-05)
+## v1.0.10 (2026-02-10)
 - Ported to Geometry Dash v2.208 / Geode SDK v5.0.0
 
 ## v1.0.9 (2025-10-12)
