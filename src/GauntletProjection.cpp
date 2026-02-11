@@ -6,7 +6,7 @@ using namespace geode::prelude;
 std::array<bool, GauntletProjection::gauntlets> GauntletProjection::projectedIDs;
 
 $on_mod(Loaded) {
-    auto& value = Mod::get()->getSavedSettingsData()["projected-ids"];
+    auto& value = Mod::get()->getSaveContainer()["projected-ids"];
     if (auto arrRes = value.asArray()) {
         arrRes.unwrap().resize(GauntletProjection::gauntlets, false);
     }
